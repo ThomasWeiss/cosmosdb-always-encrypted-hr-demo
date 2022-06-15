@@ -1,0 +1,1 @@
+# cosmosdb-always-encrypted-hr-demo
