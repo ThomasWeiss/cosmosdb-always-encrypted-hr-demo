@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
+using Azure.Security.KeyVault.Keys.Cryptography;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Encryption;
-using Microsoft.Data.Encryption.AzureKeyVaultProvider;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -16,10 +16,10 @@ namespace HRwithAE.Staff
                 "<tenant-id>",
                 "<client-id>", // HR staff client ID
                 Secrets.AppSecret);
-            var keyStoreProvider = new AzureKeyVaultKeyStoreProvider(tokenCredential);
+            var keyResolver = new KeyResolver(tokenCredential);
 
             var client = new CosmosClient("AccountEndpoint=https://localhost:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
-                .WithEncryption(keyStoreProvider);
+                .WithEncryption(keyResolver, KeyEncryptionKeyResolverName.AzureKeyVault);
 
             var program = new Program();
             await program.FetchEmployees(client);
